@@ -4,6 +4,8 @@ import { mapEmbedUrl } from '../lib/maps';
 export function GoogleMap({ address, title, className = '' }: {
   address: string; title: string; className?: string;
 }) {
-  return <div className={`map ${className}`}><iframe src={mapEmbedUrl(address)} title={title}
-    loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen /></div>;
+  return <div className={`map relative ${className}`}>
+    <iframe src={mapEmbedUrl(address)} title={title}
+      loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen className="relative z-10" />
+  </div>;
 }

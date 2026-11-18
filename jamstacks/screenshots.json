@@ -1,0 +1,22 @@
+{
+  "templateId": "next-vietnamese-pho",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "fullPage": false,
+  "captures": [
+    {
+      "mode": "light",
+      "sha256": "5e14a6a4d825c2f8959bb9b4dd1e95044383861b8d4277969c06e6c5ecad0df4",
+      "file": "jamstacks/home-light.jpg",
+      "bytes": 321806
+    },
+    {
+      "mode": "dark",
+      "sha256": "823e58558958d5e55a4e242ff2f5ada7a1ad57353567e8268c2a86daa69c4f53",
+      "file": "jamstacks/home-dark.jpg",
+      "bytes": 312022
+    }
+  ]
+}

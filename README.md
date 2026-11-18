@@ -1,69 +1,97 @@
-# JamstackTemplates Next.js starter
+# Phở Lá Xanh — Vietnamese canteen website
 
-The shared starter for Next.js templates in the `JamstackTemplates` organization. Its canonical home is
-`JamstackTemplates/template-next`, alongside the templates generated from it.
-It is not a gallery design or a published demo. Business content is sample content. No application code
-in a website created from this template depends on the starter checkout or the portal repository.
+A static Next.js website for **Phở Lá Xanh**, a fresh, herb-green Vietnamese canteen at Pike Place Market:
+phở, bánh mì and rice plates, a build-your-bowl guide and catering enquiries. This is a sample for the
+Jamstacks gallery (template `next-vietnamese-pho`); every name, address, phone number and price is
+fictitious. Replace them with your own before publishing.
 
-## Build your website
-
-Start in the checkout of the repository GitHub created from `JamstackTemplates/template-next`. All
-starter files are already present. Local development requires Node 24 or later and npm.
-
-To build a new site, fill in `plan/PLAN.md`, then tell the coding agent **`Implement plan/PLAN.md`**.
-In Claude Code, `/write-plan <business description>` drafts the brief for you. For a gallery template,
-pass the table row: `/write-plan next-type-style | Business | Description | Form purpose`.
-After reviewing the finished site, run `/cleanup-plan` or delete `plan/` and `.claude/skills/` by hand
-to remove all initial build instructions.
-
-To preview locally, run `npm ci` and `npm run dev` from the repository root.
+Local development requires Node 24 or later and npm. Run `npm ci`, then `npm run dev` to preview.
 
 ## Pages
 
 | Route | Purpose |
 | --- | --- |
-| `/` | Minimal content-driven home page and Organization JSON-LD |
-| `/contact/` | Hosted support form when configured; visible email alternative |
-| `/404.html` | Friendly static error page |
+| `/` | Hero with open-now status, three menu boards, the broth clock, today's herb basket, the build-your-bowl ticket, and Visit (`/#visit`: address, directions, hours, map). Restaurant JSON-LD |
+| `/menu/` | The full menu: phở board (small/large), bánh mì, cơm & bún, sides, drinks, dietary legend and allergen note. Menu JSON-LD |
+| `/bowl/` | Interactive bowl builder (broth, noodles, protein, garnish) with a counter estimate, counter notes and an ordering phrasebook |
+| `/contact/` | Catering and group-lunch enquiries: hosted Jamstacks form when configured, email always visible |
+| `/404.html` | "This bowl's empty." |
 
-## Make it yours
+## Everyday edits
+
+| To change… | Edit |
+| --- | --- |
+| Mark a dish sold out | `content/menu.ts`: set the item's `available: false` (shows "Hết rồi · Sold out today" on Menu and Home) |
+| A price | `content/menu.ts`: `price`, or `sizes: { small, large }` for phở (US dollars) |
+| Add a dish | `content/menu.ts`: add an item to its section with a new unique `id` |
+| An herb running out | `content/herbs.ts`: set `inBasket: false` (faded on Home, disabled in the builder) |
+| Bowl options or surcharges | `content/bowl.ts`: `bowlBase`, each step's `options`, `included` and `extraPrice` |
+| Opening hours | `content/business.ts`: `hours` (24-hour `HH:MM`, one interval per day, no overnight) |
+| Phone, email, address, directions | `content/business.ts` |
+| Contact page heading, intro and "Put these in your message" list | `content/business.ts`: `enquiries` |
+| Page headings and copy | The page file: `app/page.tsx` (Home), `app/menu/page.tsx`, `app/bowl/page.tsx`, `app/contact/page.tsx`, `app/not-found.tsx` |
+| The broth clock steps | `app/page.tsx`: each `<BrothTimeline.Step time="4:00" title="Bones in">…</BrothTimeline.Step>` |
+| Counter notes and phrasebook | `app/bowl/page.tsx` |
+
+For example, change `<Hero.Heading>Broth on since 4 a.m. …</Hero.Heading>` in `app/page.tsx` to change
+the Home headline. The components behind each name own the layout, styling and behaviour.
+
+Run `npm test` after content edits. The content tests and the build fail with a message naming the item
+to fix: duplicate or non-URL-safe IDs, prices outside $0–$40 (only `freeItems` such as the herb plate
+may be $0), more than one signature dish per section, unknown dietary tags, missing defaults in the bowl
+builder, or garnish herbs that are not in `content/herbs.ts`. Rename the business in `business.name`
+and `site.config.json` `name`.
+
+## File ownership
 
 | File | Owns |
 | --- | --- |
-| `content/business.ts` | Shared business name, contact details and starter sample copy |
-| `app/page.tsx`, `app/<route>/page.tsx` | Page composition and editable copy such as headings and calls to action |
-| `content/menu.ts` or `content/services.ts` (add when needed) | Industry-specific typed collections |
-| `site.config.json` | Public name, description, hostname, optional timeZone and Jamstacks integration |
-| `app/tailwind.input.css` | Theme tokens, utility mappings and small shared styles |
-| `components/site-header.tsx`, `site-footer.tsx` | Replaceable navigation and visual shell |
-| `lib/structured-data.ts` | Schema type/properties derived from real content |
-| `app/sitemap.ts` | Public routes; update when adding a page |
+| `content/business.ts` | Name, contact details, address, map query, hours, enquiry copy |
+| `content/menu.ts` | Menu sections, items, prices, sizes, dietary tags, availability, signature dishes, `freeItems` |
+| `content/herbs.ts` | The herb basket (Home and the bowl builder's garnish step) |
+| `content/bowl.ts` | Bowl builder steps, options, surcharges, base prices, default herbs |
+| `lib/menu.ts`, `lib/bowl.ts`, `lib/hours.ts` | Validation, price formatting, builder totals and share links, open-now state |
+| `lib/structured-data.ts` | Restaurant and Menu schema derived from content |
+| `components/home.tsx`, `menu.tsx`, `bowl-builder.tsx`, `bowl-extras.tsx`, `contact.tsx`, `page-head.tsx` | Section markup, layout and behaviour |
+| `components/art/` | Bespoke SVG artwork: the herb-plate bowl, hero counter, dishes, herbs, clock, stools, icons |
+| `components/site-header.tsx`, `site-footer.tsx`, `dividers.tsx` | Shop-sign header, tiled footer, dividers |
+| `app/tailwind.input.css` | Colour tokens (light, automatic dark, explicit dark), signboard, steel, plank wall, dado, gạch bông tile masks, tickets, boards, dish codes, motion, print |
+| `app/sitemap.ts` | Public routes; add new pages here |
+| `public/og.png` | 1200×630 social image |
 
-Edit page copy in the route file, for example `<Hero.Heading>Seasonal flowers</Hero.Heading>`
-in `app/page.tsx` for the Home page. The backing
-component owns the styling and interactions. Use typed fields for data the site needs to look up or
-reuse. For example, change `business.email` to update Contact. Rename in `business.name` and
-`site.config.json.name`. Add a typed core-content file for frequent owner edits: a food menu should use
-the existing sections/items/price/availability model; changes such as sold out, seasonal or a new section
-should be data edits with actionable content tests. Do not add business content to configuration: the
-Jamstacks provisioner replaces that file wholesale, possibly adding `provisioningId`.
+## Design
 
-## Appearance and optional local-business features
+"Gạch bông tiles and the herb plate", laid out like the canteen itself. The header is the shop fascia
+with a hand-painted yellow signboard (red lettering, green border). Page heads are signboards on the cream
+wall above a painted green dado. The hero, bowl builder and Contact sit on a brushed-steel counter with
+everyday tableware: the green-rimmed melamine bowl, herb plate, sauce dish of hoisin and sriracha, iced tea,
+chopstick tin, condiment caddy and a laminated menu. The Home menu boards hang on a green plank wall, and the
+gạch bông cement tiles are the floor in the footer. Menus are set like a printed takeaway menu: dish codes
+(P1, B2…), Vietnamese names in capitals, and section headings with a slightly off-register second ink.
+Dark mode is the night canteen: dark steel, a glowing signboard and backlit boards. The signature element is
+the top-down bowl beside its herb plate: the hero on Home and the drawing that redraws itself in the builder.
 
-The starter uses system fonts, neutral Tailwind v4 tokens and the published `jamstacks` package's
-ThemeProvider, ThemeScript and DarkModeToggle. No font download or font licence file is needed for
-system fonts. Each designed template chooses and documents self-hosted font packages and their licences.
-Utilities live in components; colours originate in CSS tokens with light, automatic-dark and explicit-dark
-values plus `@theme inline` mappings. Keep the hosted form's primary fill dark enough for white text.
-Keyboard focus, reduced motion and print styles are included. The footer credit is yours to keep,
-reword or remove.
+Dish codes come from each section's first letter and the item's position in `content/menu.ts`, so
+reordering items renumbers them. Validation fails if two sections start with the same letter.
 
-For a business with visiting hours, add address/directions/hours to typed content, set the IANA `timeZone`
-in site.config.json and use optional `GoogleMap`, `TimeZoneNote` and `OpenBadge` components. GoogleMap
-accepts an address and descriptive title; map helpers need no key. `OpenBadge` accepts seven
-`OpeningHours` records, uses the business zone and refreshes each minute in the browser; static/no-JS
-output is neutral. Same-day intervals only: overnight hours fail validation and need a tested extension
-before use. The baseline home page does not load a map or assert opening hours.
+Fonts are self-hosted from npm (SIL Open Font License 1.1), latin and Vietnamese subsets only:
+**Bungee Shade** and **Bungee Inline** (`@fontsource/bungee-shade`, `@fontsource/bungee-inline`) for the
+painted signboards, **Bungee** (`@fontsource/bungee`) for section headings and codes, **Be Vietnam Pro**
+(`@fontsource/be-vietnam-pro`, 400/500/700) for text, and **Patrick Hand** (`@fontsource/patrick-hand`) for
+handwritten notes. All artwork is inline SVG; there are no photos or stock images. Steam, the open-now pulse
+and the builder's fade are disabled under reduced motion. Print styles drop the tiles and keep the menu.
+
+## Opening hours, open-now and the bowl builder
+
+Hours live in `content/business.ts` and are shown in the business time zone (`site.config.json`
+`timeZone`, `America/Los_Angeles`). The open-now pill and today's highlighted row are computed in the
+browser and refresh every minute; static and no-JavaScript output says "See opening hours". Each day has
+one same-day interval; overnight hours are rejected by validation.
+
+The bowl builder never sends anything. Choices are kept in the URL hash (for example
+`/bowl/#beef,banh-pho,tai+chin,thai-basil+lime,small`) so a guest can show their phone at the counter; the
+total is labelled "Estimate to pay at the counter". Without JavaScript, the steps, options and surcharges
+are still listed and the default bowl is drawn.
 
 ## Public configuration
 
@@ -157,5 +185,4 @@ node --test jamstacks/config.test.mjs
 Before publication: replace neutral content and shell; validate industry data/schema and all links;
 choose licensed fonts; verify both themes/base-path/embed states; create a neutral 1200×630 public/og.png
 from the finished design and wire metadata; replace the icon; generate gallery captures and validate;
-confirm domain/Pages settings and HTTPS; remove `plan/` and `.claude/skills/` after review. The website must not import or
-link the planning folder. No stock screenshot or OG image is supplied as if it were final.
+confirm domain/Pages settings and HTTPS. No stock screenshot or OG image is supplied as if it were final.

@@ -1,0 +1,19 @@
+{
+  "name": "Phở Lá Xanh",
+  "description": "A fresh, herb-green theme for Vietnamese canteens and phở shops: gạch bông tile patterns, a menu board of phở, bánh mì and rice plates drawn bowl by bowl, a build-your-bowl guide with an interactive herb plate, open-now status, location and a Jamstacks contact component for catering trays, group lunches and allergen questions.",
+  "tech": "next",
+  "type": "vietnamese",
+  "style": "pho",
+  "internal": false,
+  "components": [
+    "support-form"
+  ],
+  "configFile": "site.config.json",
+  "screenshots": {
+    "light": "jamstacks/home-light.jpg",
+    "dark": "jamstacks/home-dark.jpg",
+    "theme": {
+      "strategy": "media"
+    }
+  }
+}

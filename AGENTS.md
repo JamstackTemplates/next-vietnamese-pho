@@ -7,14 +7,6 @@ Do not push, change remote settings or deploy without instructions. Replace samp
 owner's real details. This is a self-contained static website; it does not require the starter or portal
 repository at runtime. See README.md for local preview and publishing steps.
 
-## Building a new website
-
-When asked to `Implement plan/PLAN.md`, read the brief there and the shared build requirements in
-`plan/PROMPT_TEMPLATE.md`, then implement the site in the current checkout. The `plan/` folder is
-for initial creation and can be deleted after review. Keep it out of website code and public assets.
-The `.claude/skills/` folder holds `write-plan` (drafts `plan/PLAN.md`) and `cleanup-plan` (removes
-`plan/` and `.claude/skills/` after review). Like `plan/`, it is for initial creation only.
-
 ## Structure and content
 
 `content/business.ts` holds the starter's shared business details and sample copy. When building a
@@ -71,4 +63,28 @@ The entire jamstacks/ folder is source-gallery-only and removable. Customer code
 and Pages never import/read it. Keep site.config.json, the form and workflow outside it. Generate real
 light/dark captures after a fresh normal build and run node --test jamstacks/config.test.mjs separately.
 Each new template needs its own business-led layout/fonts/art and OG image; do not ship the neutral
-starter as a final design. Remove `plan/` and `.claude/skills/` before publishing a gallery template once reviewed.
+starter as a final design.
+
+## This site: Phở Lá Xanh
+
+Gallery sample (`next-vietnamese-pho`) for a Vietnamese canteen; all business details are fictitious.
+File ownership for future edits:
+
+- `content/business.ts`: name, contacts, address, hours (one same-day interval per day), enquiry copy.
+- `content/menu.ts`: menu sections/items, USD prices or phở `sizes`, tags, `available`, one `signature`
+  per section, `freeItems`. `content/herbs.ts`: herb basket (`inBasket`). `content/bowl.ts`: builder steps,
+  options, surcharges, `bowlBase`; the garnish step references herbs by id.
+- `lib/menu.ts`, `lib/bowl.ts`: validation with item-specific errors (also run at build time from the
+  page files), totals and the URL-hash share format. `lib/hours.ts`: `openingState`/`openingText`/
+  `hoursSummary` in 12-hour display. `lib/structured-data.ts`: Restaurant and Menu schema.
+- Page copy lives in `app/**/page.tsx` as children of `Hero.*`, `MenuBoards.*`, `BrothTimeline.*`,
+  `HerbBasket.*`, `BowlTicket.*`, `Visit.*`, `PageHead.*`, `Legend.*`, `CounterNotes.*`, `Phrasebook.*`,
+  `Contact.*`.
+- Artwork: `components/art/` (inline SVG; food colours fixed, outlines/surfaces from tokens). The
+  signature herb-plate bowl is `components/art/herb-bowl.tsx`; each option id maps to a drawn layer, and
+  unknown ids fall back to a generic drawing, so add art when adding bowl options.
+- Materials are CSS in `app/tailwind.input.css`: `.signboard` (painted sign), `.steel` (counter),
+  `.plank-wall`, `.dado`, `.misprint` (two-ink headings), `.dish-code`, and gạch bông tile masks
+  (`.tile-bg`), which are kept for the floor (footer). Dish codes come from `dishCodes()` in `lib/menu.ts`.
+- The bowl builder is a guide only: no submission, "Order at the counter", "Estimate to pay at the counter".
+- `public/og.png` was rendered from the artwork; regenerate it if the name or art changes.
